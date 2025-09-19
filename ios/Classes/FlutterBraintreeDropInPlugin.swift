@@ -155,7 +155,18 @@ public class FlutterBraintreeDropInPlugin: BaseFlutterBraintreePlugin, FlutterPl
                 return
             }
                 
-            UIApplication.shared.keyWindow?.rootViewController?.present(existingDropInController, animated: true, completion: nil)
+            if #available(iOS 13.0, *) {
+               let windowScenes = UIApplication.shared.connectedScenes
+                   .filter { $0.activationState == .foregroundActive }
+                   .compactMap { $0 as? UIWindowScene }
+               
+               let window = windowScenes.first?.windows.first(where: { $0.isKeyWindow })
+               window?.rootViewController?.present(existingDropInController, animated: true)
+           } else {
+               // Fallback for earlier versions
+               let windows = UIApplication.shared.windows
+               windows.first(where: { $0.isKeyWindow })?.rootViewController?.present(existingDropInController, animated: true)
+           }
         }
     }
     
@@ -182,7 +193,18 @@ public class FlutterBraintreeDropInPlugin: BaseFlutterBraintreePlugin, FlutterPl
         
         applePayController.delegate = self
         
-        UIApplication.shared.keyWindow?.rootViewController?.present(applePayController, animated: true, completion: nil)
+        if #available(iOS 13.0, *) {
+           let windowScenes = UIApplication.shared.connectedScenes
+               .filter { $0.activationState == .foregroundActive }
+               .compactMap { $0 as? UIWindowScene }
+           
+           let window = windowScenes.first?.windows.first(where: { $0.isKeyWindow })
+           window?.rootViewController?.present(applePayController, animated: true)
+       } else {
+           // Fallback for earlier versions
+           let windows = UIApplication.shared.windows
+           windows.first(where: { $0.isKeyWindow })?.rootViewController?.present(applePayController, animated: true)
+       }
     }
     
     private func handleResult(result: BTDropInResult?, error: Error?, flutterResult: FlutterResult, deviceData: String?) {
@@ -194,7 +216,11 @@ public class FlutterBraintreeDropInPlugin: BaseFlutterBraintreePlugin, FlutterPl
             if let result = result, result.paymentMethodType == .applePay {
                 setupApplePay(flutterResult: flutterResult)
             } else {
-                flutterResult(["paymentMethodNonce": buildPaymentNonceDict(nonce: result?.paymentMethod), "deviceData": deviceData])
+                var resultDict: [String: Any] = ["paymentMethodNonce": buildPaymentNonceDict(nonce: result?.paymentMethod)]
+                if let deviceData = deviceData {
+                    resultDict["deviceData"] = deviceData
+                }
+                flutterResult(resultDict)
             }
         }
     }
