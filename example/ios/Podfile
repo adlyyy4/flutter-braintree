@@ -37,5 +37,24 @@ end
 post_install do |installer|
   installer.pods_project.targets.each do |target|
     flutter_additional_ios_build_settings(target)
+    
+    # Fix for PPRiskMagnes.framework dSYM issue
+    if target.name == 'Braintree'
+      target.build_configurations.each do |config|
+        # Disable dSYM generation for PPRiskMagnes
+        config.build_settings['GCC_GENERATE_DEBUGGING_SYMBOLS'] = 'NO'
+        # Enable bitcode for App Store submission
+        config.build_settings['ENABLE_BITCODE'] = 'YES'
+        # Ensure dead code stripping is enabled
+        config.build_settings['DEAD_CODE_STRIPPING'] = 'YES'
+      end
+    end
+  end
+  
+  # Add script to strip problematic architectures if needed
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['EXCLUDED_ARCHS[sdk=iphonesimulator*]'] = 'arm64'
+    end
   end
 end
