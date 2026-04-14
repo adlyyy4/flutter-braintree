@@ -11,13 +11,14 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.8
-  braintree_flutter_plus:  # Move this here!
+  braintree_flutter_plus:
     path: ../
+  flutter_lints: ^6.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  # Remove braintree_flutter_plus from here
+
 
 flutter:
   uses-material-design: true
