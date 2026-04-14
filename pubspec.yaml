@@ -13,7 +13,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
   meta: ^1.16.0
+  web: ^1.1.0
 
 flutter:
   assets:
@@ -26,3 +29,6 @@ flutter:
         pluginClass: FlutterBraintreePlugin
       ios:
         pluginClass: FlutterBraintreePlugin
+      web:
+        pluginClass: BraintreeFlutterPlusWeb
+        fileName: web/braintree_flutter_plus_web.dart
