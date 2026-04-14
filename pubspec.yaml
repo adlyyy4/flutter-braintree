@@ -1,6 +1,6 @@
 name: braintree_flutter_plus
 description: Enhanced Flutter plugin that wraps the native Braintree SDKs with latest updates. Supports iOS 15+, Android 12+, and includes PayPal vault flow fixes.
-version: 5.1.1
+version: 5.2.0
 homepage: https://github.com/adlyyy4/flutter-braintree
 repository: https://github.com/adlyyy4/flutter-braintree
 issue_tracker: https://github.com/adlyyy4/flutter-braintree/issues
