@@ -1,7 +1,11 @@
+## 5.2.1
+
+- Credit [lucavenir](https://github.com/lucavenir) for the web platform implementation in 5.2.0.
+
 ## 5.2.0
 
 ### Features
-- **Web Support**: Added Flutter web platform implementation via Braintree JS SDK
+- **Web Support**: Added Flutter web platform implementation via Braintree JS SDK (thank you to [lucavenir](https://github.com/lucavenir)!)
   - Credit card tokenization on web using `Braintree.tokenizeCreditCard()`
   - PayPal vault and checkout flows on web using `Braintree.requestPaypalNonce()`
   - PayPal flow renders an overlay with the official PayPal Buttons component
