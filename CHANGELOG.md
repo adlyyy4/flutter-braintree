@@ -1,3 +1,29 @@
+## 6.0.0
+
+### Breaking changes
+- **iOS upgraded to Braintree SDK v7** (from v5), fixing the Xcode 26 hard build failure caused by
+  `UIApplication.windows` being treated as `-Werror` under `-Wdeprecated-declarations`. Thanks to
+  [@jmhodges01](https://github.com/jmhodges01) for reporting.
+- **Minimum iOS deployment target is now 16.0** (required by Braintree v7).
+- **Native iOS Drop-in SDK removed.** `braintree-ios-drop-in` has no v7-compatible release, so on
+  iOS (and web) `BraintreeDropIn.start` now presents a cross-platform Flutter payment sheet. Android
+  continues to use the native Drop-in UI.
+- **`BraintreeDropIn.start` now requires a `BuildContext`:** `start(context, request)` (the Flutter
+  sheet needs it to present).
+
+### Features
+- **Swift Package Manager support** for iOS (alongside CocoaPods). The iOS plugin is now pure Swift
+  and ships an `ios/braintree_flutter_plus/Package.swift`, which declares a `FlutterFramework`
+  dependency so the plugin builds under Flutter's SPM integration (Flutter 3.44+). The example app
+  has been migrated off CocoaPods to SPM.
+- New `Braintree.requestApplePayNonce()` for the native Apple Pay sheet on iOS.
+- `Braintree.tokenizeCreditCard()` and `requestPaypalNonce()` gained an optional
+  `collectDeviceData` parameter (plus 3D Secure / billing-address parameters on
+  `tokenizeCreditCard`); `BraintreePaymentMethodNonce` now carries an optional `deviceData` field.
+
+### Fixes
+- Fixed `BraintreeDropInRequest.toJson` sending `cardEnabled` for the `paypalEnabled` flag.
+
 ## 5.2.1
 
 - Credit [lucavenir](https://github.com/lucavenir) for the web platform implementation in 5.2.0.

@@ -23,8 +23,10 @@ void main() => runApp(
     );
 
 class MyApp extends StatefulWidget {
+  const MyApp({super.key});
+
   @override
-  _MyAppState createState() => _MyAppState();
+  State<MyApp> createState() => _MyAppState();
 }
 
 class _MyAppState extends State<MyApp> {
@@ -77,9 +79,10 @@ class _MyAppState extends State<MyApp> {
               onPressed: () async {
                 var request = BraintreeDropInRequest(
                   tokenizationKey: tokenizationKey,
+                  amount: '4.20',
                   collectDeviceData: true,
                   vaultManagerEnabled: true,
-                  requestThreeDSecureVerification: true,
+                  requestThreeDSecureVerification: false,
                   email: "test@email.com",
                   billingAddress: BraintreeBillingAddress(
                     givenName: "Jill",
@@ -116,7 +119,7 @@ class _MyAppState extends State<MyApp> {
                   ),
                   cardEnabled: true,
                 );
-                final result = await BraintreeDropIn.start(request);
+                final result = await BraintreeDropIn.start(context, request);
                 if (result != null) {
                   showNonce(result.paymentMethodNonce);
                 }

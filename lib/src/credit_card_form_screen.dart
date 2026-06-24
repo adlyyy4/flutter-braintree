@@ -8,10 +8,22 @@ import 'package:flutter/material.dart';
 import '../braintree_flutter_plus.dart';
 
 class CreditCardFormScreen extends StatefulWidget {
-  const CreditCardFormScreen({super.key, required this.authorization, required this.amount});
+  const CreditCardFormScreen({
+    super.key,
+    required this.authorization,
+    required this.amount,
+    this.collectDeviceData = false,
+    this.requestThreeDSecureVerification = false,
+    this.billingAddress,
+    this.email,
+  });
 
   final String authorization;
   final String amount;
+  final bool collectDeviceData;
+  final bool requestThreeDSecureVerification;
+  final BraintreeBillingAddress? billingAddress;
+  final String? email;
 
   @override
   State<CreditCardFormScreen> createState() => _CreditCardFormScreenState();
@@ -101,7 +113,14 @@ class _CreditCardFormScreenState extends State<CreditCardFormScreen> {
     );
 
     try {
-      final nonce = await Braintree.tokenizeCreditCard(widget.authorization, request);
+      final nonce = await Braintree.tokenizeCreditCard(
+        widget.authorization,
+        request,
+        collectDeviceData: widget.collectDeviceData,
+        requestThreeDSecureVerification: widget.requestThreeDSecureVerification,
+        billingAddress: widget.billingAddress,
+        email: widget.email,
+      );
       Navigator.of(context).pop(nonce);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));

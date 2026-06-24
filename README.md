@@ -11,7 +11,7 @@ Unlike other plugins, this plugin not only lets you start Braintree's native Dro
 This is an **actively maintained fork** of the original `flutter_braintree` package by [pikaju](https://github.com/pikaju/flutter-braintree), which is no longer being maintained. We've taken over development to provide:
 
 - 🛠️ **Critical bug fixes** and security updates
-- 📱 **Modern platform support** (iOS 15+, Android 12+)
+- 📱 **Modern platform support** (iOS 16+, Android 12+)
 - 🔄 **Regular maintenance** and dependency updates
 - 📦 **Published as `braintree_flutter_plus`** on pub.dev
 
@@ -19,7 +19,8 @@ This is an **actively maintained fork** of the original `flutter_braintree` pack
 
 ## ✨ What's New in Plus
 
-- **iOS 15.0+ Support**: Updated to latest Braintree SDKs (BraintreeDropIn 9.14.0)
+- **iOS Braintree SDK v7**: Fixes the Xcode 26 `-Wdeprecated-declarations` build failure; requires iOS 16+
+- **Cross-platform Drop-in on iOS/web**: the native iOS Drop-in SDK (no v7 release) is replaced by a Flutter payment sheet; Android keeps the native Drop-in
 - **Android 12+ Compatibility**: Fixed crashes and added proper exported flags
 - **PayPal Vault Flow**: Resolved critical Android crashes
 - **Enhanced Stability**: Updated Cardinal SDK and core dependencies
@@ -93,10 +94,10 @@ Add the wallet enabled meta-data tag to your `AndroidManifest.xml` (inside the `
 You may need to add or uncomment the following line at the top of your `ios/Podfile`:
 
 ```ruby
-platform :ios, '12.0'
+platform :ios, '16.0'
 ```
 
-**Warning:** Device data collection is not yet supported for iOS.
+Braintree v7 requires a minimum deployment target of **iOS 16.0**.
 
 #### PayPal / Venmo / 3D Secure
 
@@ -213,11 +214,14 @@ final request = BraintreeDropInRequest(
 );
 ```
 
-Then launch the drop-in:
+Then launch the drop-in (a `BuildContext` is required as of v6.0.0):
 
 ```dart
-BraintreeDropInResult result = await BraintreeDropIn.start(request);
+BraintreeDropInResult? result = await BraintreeDropIn.start(context, request);
 ```
+
+> On iOS and web this presents a cross-platform Flutter payment sheet (the native iOS Drop-in SDK
+> has no Braintree v7 release). On Android it presents the native Drop-in UI.
 
 Access the payment nonce:
 

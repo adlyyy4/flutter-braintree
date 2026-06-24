@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'braintree_flutter_plus'
-  s.version          = '5.0.3'
+  s.version          = '6.0.0'
   s.summary          = 'A Flutter plugin for Braintree'
   s.description      = <<-DESC
   A Flutter plugin that wraps the native Braintree Drop-In UI SDKs.
@@ -12,14 +12,18 @@ Pod::Spec.new do |s|
   s.license          = { :file => '../LICENSE' }
   s.author           = { 'Julien Scholz' => '' }
   s.source           = { :path => '.' }
-  s.source_files = 'Classes/**/*'
-  s.public_header_files = 'Classes/**/*.h'
+  # Sources live under the Swift Package layout so the plugin supports both
+  # CocoaPods and Swift Package Manager.
+  s.source_files = 'braintree_flutter_plus/Sources/braintree_flutter_plus/**/*.swift'
   s.dependency 'Flutter'
-  s.dependency 'BraintreeDropIn', '9.14.0'
-  s.dependency 'Braintree', '~> 5.27.0'
-  # s.dependency 'Braintree/Venmo', '~> 5.26.0'
-  s.dependency 'Braintree/PayPal', '~> 5.27.0'
-  s.dependency 'Braintree/ApplePay', '~> 5.27.0'
-  s.ios.deployment_target = '15.0'
-  s.swift_version = '5.0'
+  # braintree-ios-drop-in has no v6/v7 release (frozen at 9.14.0, pinned to Braintree ~> 5.27),
+  # so the native Drop-In SDK is removed. Drop-In is replaced by a Flutter-side payment sheet.
+  s.dependency 'Braintree', '~> 7.7'
+  s.dependency 'Braintree/Card', '~> 7.7'
+  s.dependency 'Braintree/PayPal', '~> 7.7'
+  s.dependency 'Braintree/ApplePay', '~> 7.7'
+  s.dependency 'Braintree/DataCollector', '~> 7.7'
+  s.dependency 'Braintree/ThreeDSecure', '~> 7.7'
+  s.ios.deployment_target = '16.0'
+  s.swift_version = '5.10'
 end

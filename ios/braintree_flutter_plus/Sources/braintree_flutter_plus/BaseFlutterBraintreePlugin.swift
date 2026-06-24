@@ -1,7 +1,13 @@
 import Foundation
 import Flutter
+// CocoaPods exposes a single umbrella `Braintree` module, whereas Swift Package
+// Manager exposes the individual modules. Import whichever is available.
+#if canImport(Braintree)
 import Braintree
-import BraintreeDropIn
+#else
+import BraintreeCore
+import BraintreePayPal
+#endif
 
 open class BaseFlutterBraintreePlugin: NSObject {
     internal var isHandlingResult = false;

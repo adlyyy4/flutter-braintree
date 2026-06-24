@@ -1,5 +1,10 @@
-@Deprecated(
-    'The Drop-in SDK is deprecated and will be unsupported after July 14, 2026. Please build a custom UI and use `Braintree.tokenizeCreditCard()` or `Braintree.showCreditCardForm()` to continue processing payments.')
+/// Configuration for [BraintreeDropIn.start].
+///
+/// As of v6.0.0 the native iOS Drop-in SDK has been removed (it has no Braintree
+/// v7-compatible release). On iOS/web this request now drives a Flutter payment
+/// sheet; on Android it still drives the native Drop-in UI. For full control,
+/// prefer `Braintree.tokenizeCreditCard()`, `Braintree.requestPaypalNonce()`,
+/// `Braintree.requestApplePayNonce()`, or `Braintree.showCreditCardForm()`.
 class BraintreeDropInRequest {
   BraintreeDropInRequest({
     this.clientToken,
@@ -87,7 +92,7 @@ class BraintreeDropInRequest {
         if (applePayRequest != null) 'applePayRequest': applePayRequest!.toJson(),
         'venmoEnabled': venmoEnabled,
         'cardEnabled': cardEnabled,
-        'paypalEnabled': cardEnabled,
+        'paypalEnabled': paypalEnabled,
         'maskCardNumber': maskCardNumber,
         'maskSecurityCode': maskSecurityCode,
         'vaultManagerEnabled': vaultManagerEnabled,

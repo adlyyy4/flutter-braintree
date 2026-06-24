@@ -26,6 +26,7 @@ class BraintreePaymentMethodNonce {
     required this.isDefault,
     this.paypalPayerId,
     this.amount,
+    this.deviceData,
   });
 
   factory BraintreePaymentMethodNonce.fromJson(dynamic source) {
@@ -36,6 +37,7 @@ class BraintreePaymentMethodNonce {
       isDefault: source['isDefault'],
       paypalPayerId: source['paypalPayerId'],
       amount: source['amount'],
+      deviceData: source['deviceData'],
     );
   }
 
@@ -58,4 +60,8 @@ class BraintreePaymentMethodNonce {
   /// The amount for the transaction, if available.
   /// This is for display purposes only and is not part of the Braintree nonce payload.
   final String? amount;
+
+  /// Device data string for fraud prevention, populated when `collectDeviceData`
+  /// was requested. `null` otherwise.
+  final String? deviceData;
 }
