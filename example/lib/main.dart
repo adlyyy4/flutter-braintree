@@ -116,6 +116,10 @@ class _MyAppState extends State<MyApp> {
                   paypalRequest: BraintreePayPalRequest(
                     amount: '4.20',
                     displayName: 'Example company',
+                    // Android only: PayPal (Braintree v5) returns via an App Link.
+                    // Replace with a domain you control + configure App Links.
+                    // See BraintreePayPalRequest.appLinkReturnUrl.
+                    appLinkReturnUrl: 'https://example.com/braintree-payments',
                   ),
                   cardEnabled: true,
                 );

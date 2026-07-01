@@ -18,11 +18,12 @@ pluginManagement {
 
 plugins {
     id("dev.flutter.flutter-plugin-loader") version "1.0.0"
-    id("com.android.application") version "8.12.2" apply false
+    id("com.android.application") version "9.0.1" apply false
     // START: FlutterFire Configuration
     // id("com.google.gms.google-services") version("4.3.15") apply false
     // END: FlutterFire Configuration
-    id("org.jetbrains.kotlin.android") version "2.2.0" apply false
+    // Kotlin is now provided by AGP's built-in Kotlin support (AGP 9+), so the
+    // org.jetbrains.kotlin.android plugin is no longer declared here.
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
 }
 

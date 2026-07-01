@@ -1,5 +1,3 @@
-import 'package:flutter/foundation.dart' show kIsWeb, defaultTargetPlatform, TargetPlatform;
-import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'dart:async';
 
@@ -8,15 +6,16 @@ import 'request.dart';
 import 'result.dart';
 
 class BraintreeDropIn {
-  static const MethodChannel _kChannel = const MethodChannel('flutter_braintree.drop_in');
-
   const BraintreeDropIn._();
 
   /// Launches the Braintree Drop-in payment selection.
   ///
-  /// On Android this presents the native Drop-in UI. On iOS, web, and other
-  /// platforms it presents a Flutter payment sheet (the native iOS Drop-in SDK
-  /// has no Braintree v7-compatible release), so a [BuildContext] is required.
+  /// On every platform this presents a cross-platform Flutter payment sheet, so
+  /// a [BuildContext] is required. The native Drop-in SDKs have been removed:
+  /// the iOS Drop-in SDK has no Braintree v7-compatible release, and the Android
+  /// Drop-in SDK is deprecated (end-of-life 2027) in favour of the direct
+  /// Braintree SDK, so both platforms now drive the Flutter sheet against the
+  /// direct SDKs (iOS Braintree v7, Android Braintree v5).
   ///
   /// The required options can be placed inside the [request] object.
   /// See its documentation for more information.
@@ -27,15 +26,6 @@ class BraintreeDropIn {
     BuildContext context,
     BraintreeDropInRequest request,
   ) async {
-    if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-      final result = await _kChannel.invokeMethod(
-        'start',
-        request.toJson(),
-      );
-      if (result == null) return null;
-      return BraintreeDropInResult.fromJson(result);
-    }
-
     return showBraintreeDropInSheet(context, request);
   }
 }

@@ -1,15 +1,22 @@
+// The Android Gradle Plugin is resolved from the consuming app (via its
+// settings.gradle pluginManagement), so this plugin does not pin its own AGP
+// version. Using the plugins {} block (instead of the legacy buildscript{} +
+// `apply plugin`) keeps it compatible with both AGP 8 and AGP 9 consumers.
+plugins {
+    id 'com.android.library'
+}
+
 group = 'com.example.flutter_braintree'
 version = '1.0'
 
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.1.4'
-    }
+// AGP 9 provides built-in Kotlin; older AGP needs the standalone Kotlin Gradle
+// Plugin. Declaring it here (conditionally) also tells the Flutter Gradle tool
+// that this module manages its own Kotlin plugin, so it won't force-apply the
+// KGP — which would conflict with AGP 9's built-in Kotlin. This is a Java-only
+// module, so no Kotlin compiler options are configured.
+def agpMajorVersion = com.android.Version.ANDROID_GRADLE_PLUGIN_VERSION.tokenize('.')[0].toInteger()
+if (agpMajorVersion < 9) {
+    apply plugin: 'org.jetbrains.kotlin.android'
 }
 
 rootProject.allprojects {
@@ -26,8 +33,6 @@ rootProject.allprojects {
     }
 }
 
-apply plugin: 'com.android.library'
-
 android {
     compileSdk 36
 
@@ -36,10 +41,11 @@ android {
     }
 
     defaultConfig {
-        minSdkVersion 21
+        // Braintree Android SDK v5 requires a minimum of API 23.
+        minSdkVersion 23
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    lintOptions {
+    lint {
         disable 'InvalidPackage'
     }
     compileOptions {
@@ -49,8 +55,14 @@ android {
 }
 
 dependencies {
-    implementation 'com.braintreepayments.api:drop-in:6.17.0'
-    implementation 'com.google.android.gms:play-services-wallet:19.4.0'
+    // Braintree Android SDK v5 (direct integration). The deprecated `drop-in`
+    // library has been removed; the cross-platform Flutter payment sheet drives
+    // these modules directly, mirroring the iOS v7 migration.
+    def braintreeVersion = '5.13.0'
+    implementation "com.braintreepayments.api:card:$braintreeVersion"
+    implementation "com.braintreepayments.api:paypal:$braintreeVersion"
+    implementation "com.braintreepayments.api:data-collector:$braintreeVersion"
+    implementation "com.braintreepayments.api:three-d-secure:$braintreeVersion"
     implementation 'androidx.appcompat:appcompat:1.7.1'
     implementation 'androidx.constraintlayout:constraintlayout:2.2.1'
     components.all {

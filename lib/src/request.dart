@@ -209,6 +209,7 @@ class BraintreePayPalRequest {
     this.billingAgreementDescription,
     this.payPalPaymentIntent = PayPalPaymentIntent.authorize,
     this.payPalPaymentUserAction = PayPalPaymentUserAction.default_,
+    this.appLinkReturnUrl,
   });
 
   /// Amount of the transaction. If [amount] is `null`, PayPal will use the billing agreement (Vault) flow.
@@ -231,6 +232,21 @@ class BraintreePayPalRequest {
   /// for additional documentation.
   PayPalPaymentUserAction payPalPaymentUserAction;
 
+  /// Android only. The HTTPS App Link URL used to return to the app after the
+  /// PayPal web flow (Braintree Android v5). Recommended for production: the
+  /// domain must be registered in the Braintree Control Panel, hosted with an
+  /// `assetlinks.json`, and declared as an App Link `intent-filter` on
+  /// `FlutterBraintreeCustom`.
+  ///
+  /// Optional: if omitted (or if the App Link isn't verified on-device), the
+  /// plugin falls back to a custom deep-link scheme derived from the app's
+  /// package id (`<packageid-without-underscores>.braintree`), which works in
+  /// sandbox without a domain — provided the matching `intent-filter` is
+  /// declared. Ignored on iOS and web.
+  ///
+  /// See https://github.com/braintree/braintree_android/blob/main/APP_LINK_SETUP.md
+  String? appLinkReturnUrl;
+
   /// Converts this request object into a JSON-encodable format.
   Map<String, dynamic> toJson() => {
         if (amount != null) 'amount': amount,
@@ -240,6 +256,7 @@ class BraintreePayPalRequest {
           'billingAgreementDescription': billingAgreementDescription,
         'payPalPaymentIntent': payPalPaymentIntent.name,
         'payPalPaymentUserAction': payPalPaymentUserAction.name,
+        if (appLinkReturnUrl != null) 'appLinkReturnUrl': appLinkReturnUrl,
       };
 }
 

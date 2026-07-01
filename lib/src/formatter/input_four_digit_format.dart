@@ -4,7 +4,7 @@ class FourDigitSeparatorFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
     String newText = newValue.text.replaceAll(RegExp(r'\s+'), ''); // Remove existing spaces
-    if (newText.length > 0) {
+    if (newText.isNotEmpty) {
       String formattedText = '';
       for (int i = 0; i < newText.length; i++) {
         formattedText += newText[i];

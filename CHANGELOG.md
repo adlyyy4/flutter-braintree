@@ -1,3 +1,38 @@
+## 7.0.0
+
+### Breaking changes
+- **Android upgraded to Braintree SDK v5** (from v4). The deprecated
+  `com.braintreepayments.api:drop-in` library (now inactive, end-of-life 2027) has been removed in
+  favour of the direct v5 modules (`card`, `paypal`, `data-collector`, `three-d-secure`), mirroring
+  the iOS v7 migration in 6.0.0.
+- **Native Drop-in removed on Android too.** `BraintreeDropIn.start` now presents the cross-platform
+  Flutter payment sheet on **every** platform (Android previously used the native Drop-in UI; iOS
+  and web already used the sheet as of 6.0.0).
+- **Minimum Android SDK is now API 23** (required by Braintree Android v5).
+- **PayPal on Android now needs a browser-switch return URL.** Provide a verified App Link via
+  `BraintreePayPalRequest.appLinkReturnUrl` (recommended for production), or rely on the
+  auto-derived custom deep-link scheme fallback (`<application-id-without-underscores>.braintree`)
+  which works in sandbox without a domain. Declare the matching `intent-filter` on
+  `FlutterBraintreeCustom`. See
+  [APP_LINK_SETUP.md](https://github.com/braintree/braintree_android/blob/main/APP_LINK_SETUP.md).
+- **Venmo and Google Pay are no longer supported on Android** (they were native Drop-in features).
+
+### Features
+- New `BraintreePayPalRequest.appLinkReturnUrl` (Android) for the v5 PayPal App Link return, with an
+  automatic custom-scheme deep-link fallback so PayPal works in sandbox without a registered domain.
+- Android card tokenization without 3D Secure now runs inline (no extra activity); 3D Secure and
+  PayPal use the Braintree Android v5 launcher APIs.
+
+### Fixes
+- Android payment flows now surface failures as catchable `PlatformException`s instead of crashing
+  the host app.
+
+### Internal / tooling
+- Plugin `android/build.gradle` modernized to a `plugins {}` block with no pinned Android Gradle
+  Plugin version, keeping it compatible with both AGP 8 and AGP 9 (built-in Kotlin) consumers.
+- Example Android app migrated to AGP 9, Gradle 9.1, and Flutter's built-in Kotlin (standalone
+  Kotlin Gradle Plugin removed).
+
 ## 6.0.0
 
 ### Breaking changes
