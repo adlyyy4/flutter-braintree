@@ -193,6 +193,12 @@ public class FlutterBraintreeCustomPlugin: BaseFlutterBraintreePlugin, FlutterPl
             email: string(for: "email", in: call)
         )
 
+        // braintree_ios 7.x requires a non-nil threeDSecureRequestDelegate when
+        // versionRequested is 2 (the default), otherwise BTThreeDSecureClient.start
+        // throws a configuration error before the flow runs. We provide a
+        // pass-through delegate that immediately continues the flow.
+        request.threeDSecureRequestDelegate = self
+
         let threeDSecureClient = BTThreeDSecureClient(authorization: authorization)
         threeDSecureClient.start(request) { threeDResult, error in
             if let error = error {
@@ -347,5 +353,19 @@ extension FlutterBraintreeCustomPlugin: PKPaymentAuthorizationViewControllerDele
             }
             self?.cleanupApplePay()
         }
+    }
+}
+
+// MARK: - BTThreeDSecureRequestDelegate
+
+extension FlutterBraintreeCustomPlugin: BTThreeDSecureRequestDelegate {
+    // Required by braintree_ios 7.x. We don't customize the lookup result, so
+    // just continue the flow immediately.
+    public func onLookupComplete(
+        _ request: BTThreeDSecureRequest,
+        lookupResult: BTThreeDSecureResult,
+        next: @escaping () -> Void
+    ) {
+        next()
     }
 }
