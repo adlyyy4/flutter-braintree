@@ -1,3 +1,12 @@
+## 7.0.1
+
+### Fixes
+- **iOS 3D Secure now works with braintree_ios 7.x again.** `BTThreeDSecureClient.start` requires a
+  non-nil `threeDSecureRequestDelegate` when `versionRequested` is 2 (the default), otherwise it
+  throws a configuration error before the 3DS flow runs. A pass-through delegate that continues the
+  flow immediately is now provided. Thanks to [@lukaknezic](https://github.com/lukaknezic) for the
+  fix.
+
 ## 7.0.0
 
 ### Breaking changes
