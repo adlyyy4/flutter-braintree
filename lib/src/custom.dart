@@ -35,6 +35,13 @@ class Braintree {
     return BraintreePaymentMethodNonce.fromJson(result);
   }
 
+  /// Runs 3D Secure verification on an existing payment method nonce, such as a
+  /// Google Pay card that is not network tokenized.
+  ///
+  /// [authorization] must be a valid client token. 3D Secure does not support tokenization keys.
+  /// [nonce] is the payment method nonce to verify and [amount] is the transaction amount.
+  ///
+  /// Returns a [Future] that resolves to the 3D Secure verified [BraintreePaymentMethodNonce].
   static Future<BraintreePaymentMethodNonce?> verifyThreeDSecure(
     String authorization,
     String nonce, {
