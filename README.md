@@ -154,6 +154,20 @@ BraintreePaymentMethodNonce result = await Braintree.tokenizeCreditCard(
 print(result.nonce);
 ```
 
+#### 3D Secure for an existing nonce
+
+To run 3D Secure on a nonce you already have, for example a non-network-tokenized Google Pay card, pass it to `verifyThreeDSecure`. 3D Secure requires a client token:
+
+```dart
+BraintreePaymentMethodNonce? result = await Braintree.verifyThreeDSecure(
+   '<Insert your client token here>',
+   nonce,
+   amount: '13.37',
+);
+```
+
+The returned nonce is the 3D Secure verified one. Available on Android and iOS.
+
 #### PayPal
 
 Create a PayPal request object:

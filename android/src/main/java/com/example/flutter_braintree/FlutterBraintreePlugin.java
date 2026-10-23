@@ -100,6 +100,9 @@ public class FlutterBraintreePlugin implements FlutterPlugin, ActivityAware, Met
                 case "tokenizeCreditCard":
                     handleTokenizeCreditCard(authorization, call, result);
                     break;
+                case "verifyThreeDSecure":
+                    handleVerifyThreeDSecure(authorization, call, result);
+                    break;
                 case "requestPaypalNonce":
                     handlePayPal(authorization, call, result);
                     break;
@@ -204,6 +207,18 @@ public class FlutterBraintreePlugin implements FlutterPlugin, ActivityAware, Met
                 returnSuccess(nonceMap);
             }
         });
+    }
+
+    private void handleVerifyThreeDSecure(String authorization, MethodCall call, Result result) {
+        Intent intent = new Intent(activity, FlutterBraintreeCustom.class);
+        intent.putExtra("type", "verifyThreeDSecure");
+        intent.putExtra("authorization", authorization);
+        intent.putExtra("collectDeviceData", Boolean.TRUE.equals(call.argument("collectDeviceData")));
+        intent.putExtra("nonce", (String) call.argument("nonce"));
+        intent.putExtra("amount", (String) call.argument("amount"));
+        intent.putExtra("email", (String) call.argument("email"));
+        putBillingAddressExtras(intent, call);
+        launchCustomActivity(intent, result);
     }
 
     // MARK: - PayPal (delegated to the launcher activity)

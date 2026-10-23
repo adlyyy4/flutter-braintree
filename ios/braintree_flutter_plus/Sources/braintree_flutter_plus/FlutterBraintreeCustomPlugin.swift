@@ -66,6 +66,8 @@ public class FlutterBraintreeCustomPlugin: BaseFlutterBraintreePlugin, FlutterPl
             handlePayPal(authorization: authorization, call: call, result: result)
         case "tokenizeCreditCard":
             handleTokenizeCreditCard(authorization: authorization, call: call, result: result)
+        case "verifyThreeDSecure":
+            handleVerifyThreeDSecure(authorization: authorization, call: call, result: result)
         case "requestApplePayNonce":
             handleApplePay(authorization: authorization, call: call, result: result)
         default:
@@ -167,6 +169,18 @@ public class FlutterBraintreeCustomPlugin: BaseFlutterBraintreePlugin, FlutterPl
             } else {
                 self.finish(nonce: nonce, error: nil, authorization: authorization, call: call, amount: amount, result: result)
             }
+        }
+    }
+
+    private func handleVerifyThreeDSecure(authorization: String, call: FlutterMethodCall, result: @escaping FlutterResult) {
+        guard let nonce = string(for: "nonce", in: call), let amount = string(for: "amount", in: call) else {
+            isHandlingResult = false
+            result(nil)
+            return
+        }
+
+        performThreeDSecure(authorization: authorization, nonce: nonce, amount: amount, call: call) { [weak self] verifiedNonce, error in
+            self?.finish(nonce: verifiedNonce, error: error, authorization: authorization, call: call, amount: amount, result: result)
         }
     }
 

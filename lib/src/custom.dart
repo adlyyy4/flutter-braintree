@@ -35,6 +35,26 @@ class Braintree {
     return BraintreePaymentMethodNonce.fromJson(result);
   }
 
+  static Future<BraintreePaymentMethodNonce?> verifyThreeDSecure(
+    String authorization,
+    String nonce, {
+    required String amount,
+    bool collectDeviceData = false,
+    BraintreeBillingAddress? billingAddress,
+    String? email,
+  }) async {
+    final result = await _kChannel.invokeMethod('verifyThreeDSecure', {
+      'authorization': authorization,
+      'nonce': nonce,
+      'amount': amount,
+      'collectDeviceData': collectDeviceData,
+      if (billingAddress != null) 'billingAddress': billingAddress.toJson(),
+      if (email != null) 'email': email,
+    });
+    if (result == null) return null;
+    return BraintreePaymentMethodNonce.fromJson(result);
+  }
+
   /// Requests a PayPal payment method nonce.
   ///
   /// [authorization] must be either a valid client token or a valid tokenization key.

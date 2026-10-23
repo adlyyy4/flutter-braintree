@@ -15,7 +15,6 @@ import java.util.Locale;
 
 import com.braintreepayments.api.card.Card;
 import com.braintreepayments.api.card.CardClient;
-import com.braintreepayments.api.card.CardNonce;
 import com.braintreepayments.api.card.CardResult;
 import com.braintreepayments.api.card.CardTokenizeCallback;
 import com.braintreepayments.api.datacollector.DataCollector;
@@ -97,6 +96,8 @@ public class FlutterBraintreeCustom extends AppCompatActivity {
         if (savedInstanceState == null) {
             if ("tokenizeCreditCard".equals(type)) {
                 startCardFlow();
+            } else if ("verifyThreeDSecure".equals(type)) {
+                startThreeDSecure(intent.getStringExtra("nonce"));
             } else if ("requestPaypalNonce".equals(type)) {
                 startPayPalFlow();
             } else {
@@ -133,7 +134,7 @@ public class FlutterBraintreeCustom extends AppCompatActivity {
             @Override
             public void onCardResult(CardResult cardResult) {
                 if (cardResult instanceof CardResult.Success) {
-                    startThreeDSecure(((CardResult.Success) cardResult).getNonce());
+                    startThreeDSecure(((CardResult.Success) cardResult).getNonce().getString());
                 } else if (cardResult instanceof CardResult.Failure) {
                     returnError(((CardResult.Failure) cardResult).getError());
                 }
@@ -141,11 +142,11 @@ public class FlutterBraintreeCustom extends AppCompatActivity {
         });
     }
 
-    private void startThreeDSecure(CardNonce cardNonce) {
+    private void startThreeDSecure(String nonce) {
         Intent intent = getIntent();
 
         ThreeDSecureRequest request = new ThreeDSecureRequest();
-        request.setNonce(cardNonce.getString());
+        request.setNonce(nonce);
         request.setAmount(amount);
         String email = intent.getStringExtra("email");
         if (email != null) {
