@@ -1,3 +1,14 @@
+## 7.1.0
+
+### Features
+- **3D Secure for an existing nonce.** New `Braintree.verifyThreeDSecure(authorization, nonce,
+  amount: ...)` runs 3D Secure on a payment method nonce you already have and returns the verified
+  nonce. This is needed for Google Pay cards that are not network tokenized (`PAN_ONLY`), which
+  require 3D Secure. Accepts optional `billingAddress`, `email` and `collectDeviceData`, requires a
+  client token, and is available on Android and iOS. Thanks to
+  [@icottiero](https://github.com/icottiero) for the contribution
+  ([#7](https://github.com/adlyyy4/flutter-braintree/pull/7)).
+
 ## 7.0.1
 
 ### Fixes
