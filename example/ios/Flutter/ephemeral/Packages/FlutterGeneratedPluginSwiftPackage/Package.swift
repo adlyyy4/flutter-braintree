@@ -9,22 +9,17 @@ import PackageDescription
 let package = Package(
     name: "FlutterGeneratedPluginSwiftPackage",
     platforms: [
-        .iOS("16.0")
+        .iOS("15.0")
     ],
     products: [
         .library(name: "FlutterGeneratedPluginSwiftPackage", type: .static, targets: ["FlutterGeneratedPluginSwiftPackage"])
     ],
     dependencies: [
-        .package(name: "braintree_flutter_plus", path: "../.packages/braintree_flutter_plus"),
-        .package(name: "FlutterFramework", path: "../.packages/FlutterFramework")
+        
     ],
     targets: [
         .target(
-            name: "FlutterGeneratedPluginSwiftPackage",
-            dependencies: [
-                .product(name: "braintree-flutter-plus", package: "braintree_flutter_plus"),
-                .product(name: "FlutterFramework", package: "FlutterFramework")
-            ]
+            name: "FlutterGeneratedPluginSwiftPackage"
         )
     ]
 )
